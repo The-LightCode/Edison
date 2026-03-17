@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="portfolio.css">
+</head>
+<body>
+    <header class="header">
+        <a href = "#"class = "logo"> Edison</a>
+         <nav>
+            <div class="nav-links" id="navLinks">
+               <i class="material-icons"style="cursor: pointer;" onclick="hideMenu()">close</i> 
+                <ul>
+                   <li><a href="FIRS.html" > Home</a></li>
+                   <li><a href="about.html" > About</a></li> 
+                   <li><a href="about.html"> Services</a></li>
+                   <li><a href="port.html" class="active"> Portfolio</a></li>
+                   <li><a href="contact.html"> Contact</a></li> 
+                </ul>
+            </div>
+            <i class="material-icons" style="cursor: pointer;" onclick="showMenu()">menu</i>
+        </nav>  
+    </header>
+            <h1 class="sub-title">Portfolio</h1>
+        <div class="about-col">
+
+                
+                <div class="port">
+                    <P>(Projects Available on 
+                        <a href="mailto:edison1tech@gmail.com?subject=
+                        Request for ...(please fill in your requests)">REQUEST</a>)</P>
+                </div>
+                <div class="tabs">
+                    <p  class="tab-btn active" data-tab="ai">AI/ML </p>
+                    <p class="tab-btn"data-tab="graphics" >Graphics</p>
+                    <p class="tab-btn" data-tab="webdev" >Web-Development</p>
+                </div>
+                <div class="tab-content">
+                     <div class="tab-pane active" id="ai/ml">
+                       <ul>
+                          <li><span>Incubator Hub</span><br >Diabetes Prediction Model</li>
+                          <li><span>Edison Technology</span><br>Integrating Chatbot to web</li>
+                        </ul>
+                    </div>
+
+                    <div class="tab-pane" id="graphics" >
+                        <ul>
+                           <li><span>2024</span><br>Incubator Hub</li>
+                        
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="webdev" >
+                        <ul>
+                          <li><span>Website Creation</span><br><a href="www.edison.com">www.edison.com</a></li>
+                          <li><span>company Website</span><br><a href="">www.EdisonTechnolgy.com</a></li>
+                        </ul>
+                   </div>
+
+                
+                
+                </div>
+                
+            </div>
+        </div>
+      </div>
+          
+    </div>
+ <script>
+   
+
+
+   const tabBtns = document.querySelectorAll('.tab-btn');
+   const tabPanes = document.querySelectorAll('.tab-pane');
+   
+   tabBtns.forEach(btn => {
+         btn.addEventListener('click', () => {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabPanes.forEach(p => p.classList.remove('active'));
+
+            btn.classList.add('active');
+            const tab = btn.dataset.tab;
+            document.getElementById(tab).classList.add('active');
+         } )  
+   } );
+    
+
+   
+       var navLinks = document.getElementById("navLinks");
+       function showMenu(){
+           navLinks.style.right = "0";
+       }
+
+       function hideMenu(){
+           navLinks.style.right = "-200px";
+       }
+                 
+ </script>    
+</body>
+</html>

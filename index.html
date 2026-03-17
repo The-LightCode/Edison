@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Firstpage</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+    <header class="header">
+        <a href = "#"class = "logo"> Edison</a>
+         <nav>
+            <div class="nav-links" id="navLinks">
+               <i class="material-icons" style="cursor: pointer;" onclick="hideMenu()">close</i>
+
+                <ul>
+                   <li><a href="FIRS.html" class="active"> Home</a></li>
+                   <li><a href="about.html"> About</a></li> 
+                   <li><a href="services.html"> Services</a></li>
+                   <li><a href="port.html"> Portfolio</a></li>
+                   <li><a href="contact.html"> Contact</a></li> 
+                </ul>
+            </div>
+            <i class="material-icons" style="cursor: pointer;" onclick="showMenu()">menu</i>
+        </nav>       
+    
+    </header>
+    <section class="home">
+        <div class="home-content">
+            <h1>Hi, I'm Edison </h1>
+            <h3>Tech Saavy - AI/ML, Fullstack Web-Dev(Python, React.js, Html,Css)</h3>
+            <p>I help brand and companes leverage modern technological 
+                 advancement to ensure profitability. </p>
+             <div class="btn-box">
+                <a href="mailto:edison1tech@gmail.com?subject=Hiring Your Services"class="Hire"> Hire Me</a>
+                <a href="https://api.whatsapp.com/send?phone=2347078115094"> Let's Talk</a>
+             </div>    
+        </div>       
+    </section>
+    
+<script>
+   
+       var navLinks = document.getElementById("navLinks");
+       function showMenu(){
+           navLinks.style.right = "0";
+       }
+
+       function hideMenu(){
+           navLinks.style.right = "-200px";
+       }
+            
+            
+    
+    
+</script>
+</body>
+
+
+</html

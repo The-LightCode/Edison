@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About MENU</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+     <header class="header">
+        <a href = "#"class = "logo"> Edison</a>
+         <nav>
+            <div class="nav-links" id="navLinks">
+               <i class="material-icons"style="cursor: pointer;" onclick="hideMenu()">close</i> 
+                <ul>
+                   <li><a href="FIRS.html" > Home</a></li>
+                   <li><a href="about.html" class="active"> About</a></li> 
+                   <li><a href="services.html"> Services</a></li>
+                   <li><a href="port.html"> Portfolio</a></li>
+                   <li><a href="contact.html"> Contact</a></li> 
+                </ul>
+            </div>
+            <i class="material-icons" style="cursor: pointer;" onclick="showMenu()">menu</i>
+        </nav>
+
+         
+        
+    
+    </header>
+    <!---------about----------->
+    <div id="about">
+      <div class="container">
+        <div class="row">
+            <div class="about-col-1">
+                <img src="images/d.p 2.jpeg">
+            </div>
+            <div class="about-col-2">
+                <h1 class="sub-title">About Me</h1>
+                <p class="abou">Highly Motivated Mechanical Engineer, with
+                     proficiency in AI/ML Engineering, Web-Development, Graphics Design.</p>
+                <div class="tabs">
+                    <p  class="tab-btn active" data-tab="skill">Skills </p>
+                    <p class="tab-btn"data-tab="experience" >Experience</p>
+                    <p class="tab-btn" data-tab="education" >Education</p>
+                </div>
+                <div class="tab-content">
+                     <div class="tab-pane active" id="skill">
+                       <ul>
+                          <li><span>Web-Development</span><br>Fullstack</li>
+                          <li><span>AI/ML</span><br>AI/Ml Engineer</li>
+                           <li><span>Graphics Design</span><br>Graphics Design and Video Editing</li>
+                    
+                        </ul>
+                    </div>
+
+                    <div class="tab-pane" id="education" >
+                        <ul>
+                           <li><span>2024</span><br>Incubator Hub</li>
+                        
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="experience" >
+                        <ul>
+                          <li><span>2024 - 2024</span><br>Incubator Hub</li>
+                          <li><span>2026 - Current</span><br>Chief Dev at Edison Technology</li>
+                          <li><span>Graphics Design</span><br>Graphics Design and Video Editing</li>
+
+                        </ul>
+                   </div>
+
+                </div>
+                
+            </div>
+        </div>
+      </div>
+          
+    </div>
+<script>
+   
+
+
+   const tabBtns = document.querySelectorAll('.tab-btn');
+   const tabPanes = document.querySelectorAll('.tab-pane');
+   
+   tabBtns.forEach(btn => {
+         btn.addEventListener('click', () => {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabPanes.forEach(p => p.classList.remove('active'));
+
+            btn.classList.add('active');
+            const tab = btn.dataset.tab;
+            document.getElementById(tab).classList.add('active');
+         } )  
+   } );
+    
+
+   
+       var navLinks = document.getElementById("navLinks");
+       function showMenu(){
+           navLinks.style.right = "0";
+       }
+
+       function hideMenu(){
+           navLinks.style.right = "-200px";
+       }
+            
+            
+    
+    
+
+</script>
+
+</body>
+</html>
