@@ -83,8 +83,8 @@ body{
     inset: 0;
     z-index: -1;
     
-    /* CONTROL OPACITY HERE */
-    opacity: 0.4; 
+    /* opacity: 0.4;CONTROL OPACITY HERE */
+     
     
     background-position: center;
     background-size: cover;
