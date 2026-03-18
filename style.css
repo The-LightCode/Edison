@@ -67,29 +67,43 @@ body{
     text-decoration: none;
 }
 
-.home{
+.home {
     display: flex;
     align-items: center;
     height: 100vh;
     padding: 0 10%;
-    background-image:to top, linear-gradient((rgba(0, 0, 0, 0.5)0%,
-    rgba(204, 186, 186, 0.5)50%)), url('images/d.p.jpeg');
-    background-position: center;
-    background-size: cover;
-     bottom: 0;
-    
+    position: relative; /* Setup for background layer */
+    isolation: isolate;  /* Keeps background behind text */
+    overflow: hidden;
 }
 
-.home {
-  background-image:linear-gradient(rgba(26, 24, 24, 0.7), rgba(148, 102, 102, 0.7)), url('images/d.p.jpeg');
-  animation: change-bg 8s infinite;
-  
+.home::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    
+    /* CONTROL OPACITY HERE */
+    opacity: 0.4; 
+    
+    background-position: center;
+    background-size: cover;
+    
+    /* MOVE ANIMATION HERE */
+    animation: change-bg 8s infinite;
 }
 
 @keyframes change-bg {
-0% {  background-image:linear-gradient(rgba(26, 24, 24, 0.7), rgba(148, 102, 102, 0.7)), url('images/d.p.jpeg'); }
-50% { background-image:linear-gradient(rgba(26, 24, 24, 0.7), rgba(148, 102, 102, 0.7)), url('images/d.p 2.jpeg'); } 
+    0%, 100% {  
+        background-image: linear-gradient(rgba(26, 24, 24, 0.7), rgba(148, 102, 102, 0.7)), 
+        url('images/d.p.jpeg'); 
+    }
+    50% { 
+        background-image: linear-gradient(rgba(26, 24, 24, 0.7), rgba(148, 102, 102, 0.7)), 
+        url('images/d.p 2.jpeg'); 
+    } 
 }
+
 
 .home-content{
     max-width: 560px;
