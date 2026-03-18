@@ -77,18 +77,18 @@ body{
     background-position: center;
     background-size: cover;
      bottom: 0;
-    opacity: 0.3;
+    
 }
 
 .home {
-  background-image: url('images/d.p.jpeg');
-  animation: change-bg 10s infinite;
+  background-image:linear-gradient(rgba(26, 24, 24, 0.7), rgba(148, 102, 102, 0.7)), url('images/d.p.jpeg');
+  animation: change-bg 8s infinite;
   
 }
 
 @keyframes change-bg {
-0% {  background-image: url('images/d.p.jpeg'); }
-50% { background-image: url('images/d.p 2.jpeg'); } 
+0% {  background-image:linear-gradient(rgba(26, 24, 24, 0.7), rgba(148, 102, 102, 0.7)), url('images/d.p.jpeg'); }
+50% { background-image:linear-gradient(rgba(26, 24, 24, 0.7), rgba(148, 102, 102, 0.7)), url('images/d.p 2.jpeg'); } 
 }
 
 .home-content{
