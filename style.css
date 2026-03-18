@@ -72,24 +72,29 @@ body{
     align-items: center;
     height: 100vh;
     padding: 0 10%;
-    position: relative; /* Setup for background layer */
-    isolation: isolate;  /* Keeps background behind text */
-    overflow: hidden;
+    
+    /* CRITICAL: Reference point for the background */
+    position: relative; 
+    /* CRITICAL: Prevents z-index from hiding the background */
+    isolation: isolate; 
+    
+    /* REMOVE ALL BACKGROUND AND OPACITY FROM HERE */
+    background: none; 
+    opacity: 1 !important; 
 }
 
+/* This is the "faint" layer */
 .home::before {
     content: "";
     position: absolute;
-    inset: 0;
-    z-index: -1;
+    inset: 0; 
+    z-index: -1; /* Puts it behind the text */
     
-    /* opacity: 0.4;CONTROL OPACITY HERE */
-     
+    /* YOUR FAINTNESS SETTING */
+    opacity: 0.3; 
     
     background-position: center;
     background-size: cover;
-    
-    /* MOVE ANIMATION HERE */
     animation: change-bg 8s infinite;
 }
 
