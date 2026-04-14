@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Orugbo Edison — Engineer · Developer · AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+/* ─── RESET & VARIABLES ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #060810;
+  --surface: #0d1120;
+  --card: #111826;
+  --border: #1e2a40;
+  --text: #e8ecf4;
+  --muted: #6b7a99;
+  --accent-mech: #f5a623;
+  --accent-web: #00e5ff;
+  --accent-ai: #b46fff;
+  --glow-mech: rgba(245,166,35,0.15);
+  --glow-web: rgba(0,229,255,0.12);
+  --glow-ai: rgba(180,111,255,0.15);
+  --font-head: 'Syne', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --font-serif: 'Instrument Serif', serif;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-head);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ─── CUSTOM CURSOR ─────────────────────────────────────── */
+#cursor { position:fixed;width:12px;height:12px;background:var(--accent-web);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s,background .2s;mix-blend-mode:screen; }
+#cursor-ring { position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,229,255,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .18s ease,width .2s,height .2s,border-color .2s; }
+
+/* ─── NOISE OVERLAY ─────────────────────────────────────── */
+body::before {
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:.025;pointer-events:none;z-index:1000;
+}
+
+/* ─── SCROLLBAR ──────────────────────────────────────────── */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* ─── NAV ────────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: rgba(6,8,16,.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: padding .3s;
+}
+.nav-logo {
+  font-size: 1.05rem; font-weight: 800; letter-spacing: .04em;
+  background: linear-gradient(90deg, var(--accent-web), var(--accent-ai));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  font-size: .8rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none; font-weight: 600;
+  position: relative; transition: color .2s;
+}
+.nav-links a::after {
+  content:''; position:absolute; bottom:-4px; left:0; width:0; height:1.5px;
+  background: var(--accent-web); transition: width .25s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta {
+  background: transparent; border: 1.5px solid var(--accent-web);
+  color: var(--accent-web); padding: .45rem 1.2rem;
+  border-radius: 4px; font-family: var(--font-head);
+  font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+  cursor: none; font-weight: 700; transition: background .2s, color .2s;
+}
+.nav-cta:hover { background: var(--accent-web); color: var(--bg); }
+
+/* ─── HAMBURGER ──────────────────────────────────────────── */
+.burger { display: none; flex-direction: column; gap: 5px; cursor: none; background: none; border: none; }
+.burger span { width: 24px; height: 2px; background: var(--text); display: block; transition: .3s; }
+.mobile-menu {
+  display: none; position: fixed; inset: 0; z-index: 490;
+  background: rgba(6,8,16,.97); flex-direction: column;
+  align-items: center; justify-content: center; gap: 2.5rem;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  font-size: 2rem; font-weight: 800; color: var(--text);
+  text-decoration: none; letter-spacing: .06em;
+  transition: color .2s;
+}
+.mobile-menu a:hover { color: var(--accent-web); }
+
+/* ─── HERO ───────────────────────────────────────────────── */
+#hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; padding: 8rem 4rem 4rem;
+  position: relative; overflow: hidden;
+}
+.hero-grid-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0,229,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+.hero-glow {
+  position: absolute; width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,229,255,.07) 0%, transparent 70%);
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  pointer-events: none; animation: pulse 6s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:.6;transform:translate(-50%,-50%) scale(1)} 50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)} }
+
+.hero-tag {
+  display: inline-block; font-family: var(--font-mono); font-size: .72rem;
+  color: var(--accent-web); letter-spacing: .14em; text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  animation: fadeUp .8s .1s both;
+}
+.hero-tag::before { content: '> '; }
+
+.hero-name {
+  font-size: clamp(3rem, 8vw, 7.5rem); font-weight: 800; line-height: .92;
+  letter-spacing: -.03em; margin-bottom: 1rem;
+  animation: fadeUp .8s .2s both;
+}
+.hero-name .line2 {
+  font-family: var(--font-serif); font-style: italic;
+  background: linear-gradient(135deg, var(--accent-web) 0%, var(--accent-ai) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  font-weight: 400;
+}
+
+.hero-roles {
+  display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.8rem 0 2.5rem;
+  animation: fadeUp .8s .3s both;
+}
+.role-pill {
+  font-size: .72rem; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; padding: .4rem 1rem; border-radius: 2px;
+}
+.pill-web { background: rgba(0,229,255,.1); color: var(--accent-web); border: 1px solid rgba(0,229,255,.25); }
+.pill-mech { background: rgba(245,166,35,.1); color: var(--accent-mech); border: 1px solid rgba(245,166,35,.25); }
+.pill-ai { background: rgba(180,111,255,.1); color: var(--accent-ai); border: 1px solid rgba(180,111,255,.25); }
+
+.hero-desc {
+  max-width: 520px; line-height: 1.7; color: var(--muted);
+  font-size: 1rem; font-family: var(--font-mono); font-weight: 300;
+  animation: fadeUp .8s .4s both;
+}
+
+.hero-ctas {
+  display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2.5rem;
+  animation: fadeUp .8s .5s both;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-web), var(--accent-ai));
+  color: var(--bg); padding: .8rem 2rem; border-radius: 4px;
+  font-weight: 800; font-size: .82rem; letter-spacing: .1em;
+  text-transform: uppercase; text-decoration: none;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 0 30px rgba(0,229,255,.2);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,229,255,.35); }
+.btn-ghost {
+  background: transparent; border: 1.5px solid var(--border);
+  color: var(--text); padding: .8rem 2rem; border-radius: 4px;
+  font-weight: 700; font-size: .82rem; letter-spacing: .1em;
+  text-transform: uppercase; text-decoration: none;
+  transition: border-color .2s, color .2s;
+}
+.btn-ghost:hover { border-color: var(--accent-ai); color: var(--accent-ai); }
+
+.hero-stats {
+  position: absolute; right: 4rem; bottom: 3rem;
+  display: flex; flex-direction: column; gap: 2rem; align-items: flex-end;
+  animation: fadeUp .8s .6s both;
+}
+.stat-item { text-align: right; }
+.stat-num { font-size: 2.2rem; font-weight: 800; line-height: 1; }
+.stat-label { font-size: .68rem; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; font-family: var(--font-mono); }
+
+.scroll-hint {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+  color: var(--muted); font-size: .65rem; letter-spacing: .15em; text-transform: uppercase;
+  font-family: var(--font-mono); animation: fadeUp .8s .8s both;
+}
+.scroll-line { width: 1px; height: 50px; background: linear-gradient(var(--accent-web), transparent); animation: scrollDown 2s ease-in-out infinite; }
+@keyframes scrollDown { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+/* ─── ABOUT SECTION ──────────────────────────────────────── */
+#about {
+  padding: 7rem 4rem;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+}
+.about-photo-wrap {
+  position: relative;
+}
+.about-photo-frame {
+  width: 100%; aspect-ratio: 3/4; max-width: 380px;
+  border-radius: 8px; overflow: hidden;
+  position: relative;
+}
+.about-photo-frame img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.photo-placeholder {
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, var(--card) 0%, #1a2540 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem;
+}
+.photo-placeholder .icon { font-size: 4rem; opacity: .3; }
+.photo-placeholder p { font-size: .7rem; letter-spacing: .1em; color: var(--muted); font-family: var(--font-mono); }
+.photo-deco {
+  position: absolute; top: -16px; left: -16px; right: 16px; bottom: -16px;
+  border: 1.5px solid var(--accent-web); border-radius: 10px;
+  opacity: .2; pointer-events: none;
+}
+.photo-deco2 {
+  position: absolute; top: 16px; left: 16px; right: -16px; bottom: -32px;
+  border: 1px solid var(--accent-ai); border-radius: 10px;
+  opacity: .12; pointer-events: none;
+}
+.photo-tag {
+  position: absolute; bottom: -1.5rem; right: -2rem;
+  background: var(--card); border: 1px solid var(--border);
+  padding: .8rem 1.2rem; border-radius: 6px;
+  font-family: var(--font-mono); font-size: .7rem; color: var(--accent-web);
+}
+.about-text .section-label {
+  font-family: var(--font-mono); font-size: .7rem; letter-spacing: .2em;
+  color: var(--accent-web); text-transform: uppercase; margin-bottom: 1rem;
+}
+.about-text h2 { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; }
+.about-text h2 em { font-family: var(--font-serif); font-style: italic; color: var(--accent-ai); font-weight: 400; }
+.about-text p { color: var(--muted); line-height: 1.8; margin-bottom: 1.2rem; font-family: var(--font-mono); font-size: .88rem; font-weight: 300; }
+
+.skills-grid { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 2rem; }
+.skill-tag {
+  font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: .3rem .75rem; border-radius: 2px;
+  background: var(--card); border: 1px solid var(--border); color: var(--muted);
+  transition: border-color .2s, color .2s;
+}
+.skill-tag:hover { border-color: var(--accent-web); color: var(--accent-web); }
+
+/* ─── CORE SECTIONS ──────────────────────────────────────── */
+.core-section { padding: 6rem 4rem; position: relative; }
+.core-section::before {
+  content: ''; position: absolute; top: 0; left: 4rem; right: 4rem; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+.section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3.5rem; flex-wrap: wrap; gap: 1rem; }
+.section-num {
+  font-size: 5rem; font-weight: 800; line-height: 1;
+  opacity: .06; position: absolute; top: 4.5rem; left: 3.8rem;
+  font-family: var(--font-mono); pointer-events: none;
+}
+.core-label {
+  font-family: var(--font-mono); font-size: .7rem; letter-spacing: .2em;
+  text-transform: uppercase; margin-bottom: .6rem;
+}
+.core-title { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800; line-height: 1.05; }
+.core-title em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+
+/* Accent per core */
+.web-accent { color: var(--accent-web); }
+.mech-accent { color: var(--accent-mech); }
+.ai-accent { color: var(--accent-ai); }
+
+/* ─── PROJECTS GRID ──────────────────────────────────────── */
+.projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+.project-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden; position: relative;
+  transition: transform .3s, border-color .3s, box-shadow .3s;
+  cursor: none;
+}
+.project-card:hover { transform: translateY(-6px); }
+
+.project-card.web:hover { border-color: rgba(0,229,255,.35); box-shadow: 0 20px 60px var(--glow-web); }
+.project-card.mech:hover { border-color: rgba(245,166,35,.35); box-shadow: 0 20px 60px var(--glow-mech); }
+.project-card.ai:hover { border-color: rgba(180,111,255,.35); box-shadow: 0 20px 60px var(--glow-ai); }
+
+.project-card.featured { grid-column: span 2; }
+
+.project-visual {
+  width: 100%; aspect-ratio: 16/9; position: relative; overflow: hidden;
+}
+.project-card.featured .project-visual { aspect-ratio: 21/9; }
+
+.project-mockup {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem; position: relative;
+}
+/* Project visual themes */
+.mockup-ecommerce { background: linear-gradient(135deg,#0d1a2d,#0a2240); }
+.mockup-saas { background: linear-gradient(135deg,#0d1a2d,#0e1830); }
+.mockup-dashboard { background: linear-gradient(135deg,#0d1a2d,#091828); }
+.mockup-cad { background: linear-gradient(135deg,#1a1200,#2a1e00); }
+.mockup-drone { background: linear-gradient(135deg,#1a0e00,#261800); }
+.mockup-hvac { background: linear-gradient(135deg,#0f1400,#181f00); }
+.mockup-nlp { background: linear-gradient(135deg,#130a1f,#1a0e28); }
+.mockup-vision { background: linear-gradient(135deg,#0d0a1f,#130e2a); }
+.mockup-predict { background: linear-gradient(135deg,#0a0f1f,#0d1528); }
+
+.mockup-inner {
+  position: absolute; inset: 0; display: flex;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 1rem; padding: 1.5rem;
+}
+
+/* Mini UI inside cards */
+.mini-browser {
+  width: 85%; height: 85%; background: rgba(255,255,255,.03);
+  border-radius: 6px; border: 1px solid rgba(255,255,255,.08);
+  overflow: hidden;
+}
+.mini-browser-bar {
+  height: 20px; background: rgba(255,255,255,.05); display: flex;
+  align-items: center; padding: 0 8px; gap: 4px;
+}
+.dot { width: 5px; height: 5px; border-radius: 50%; }
+.dot.r{background:#ff5f57} .dot.y{background:#febc2e} .dot.g{background:#28c840}
+.mini-browser-body { padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+.mini-row { height: 6px; border-radius: 3px; background: rgba(255,255,255,.07); }
+.mini-row.accent-web { background: rgba(0,229,255,.25); width: 60%; }
+.mini-row.accent-mech { background: rgba(245,166,35,.25); width: 60%; }
+.mini-row.accent-ai { background: rgba(180,111,255,.25); width: 60%; }
+.mini-row.w40 { width: 40%; }
+.mini-row.w70 { width: 70%; }
+.mini-row.w50 { width: 50%; }
+.mini-row.w80 { width: 80%; }
+.mini-row.w30 { width: 30%; }
+
+.cad-sketch {
+  width: 80%; height: 80%;
+  display: flex; align-items: center; justify-content: center;
+}
+.cad-sketch svg { width: 100%; height: 100%; }
+
+.neural-dots {
+  display: grid; grid-template-columns: repeat(5,1fr); gap: 8px;
+  width: 70%;
+}
+.n-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(180,111,255,.3);
+  animation: flicker 2s infinite;
+}
+.n-dot:nth-child(odd) { background: rgba(0,229,255,.3); animation-delay: .5s; }
+@keyframes flicker { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+.project-body { padding: 1.4rem; }
+.project-tags { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .8rem; }
+.ptag {
+  font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: .2rem .55rem; border-radius: 2px;
+}
+.ptag.web { background: rgba(0,229,255,.08); color: var(--accent-web); border: 1px solid rgba(0,229,255,.2); }
+.ptag.mech { background: rgba(245,166,35,.08); color: var(--accent-mech); border: 1px solid rgba(245,166,35,.2); }
+.ptag.ai { background: rgba(180,111,255,.08); color: var(--accent-ai); border: 1px solid rgba(180,111,255,.2); }
+
+.project-title { font-size: 1.05rem; font-weight: 800; margin-bottom: .4rem; }
+.project-desc { font-size: .78rem; color: var(--muted); line-height: 1.65; font-family: var(--font-mono); font-weight: 300; }
+.project-footer {
+  padding: 0 1.4rem 1.2rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.project-link {
+  font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  text-decoration: none; display: flex; align-items: center; gap: .4rem;
+  transition: gap .2s;
+}
+.project-link.web { color: var(--accent-web); }
+.project-link.mech { color: var(--accent-mech); }
+.project-link.ai { color: var(--accent-ai); }
+.project-link:hover { gap: .7rem; }
+
+/* ─── SKILLS DEEP DIVE ───────────────────────────────────── */
+#skills { padding: 6rem 4rem; }
+.skills-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem; }
+.skill-col {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 2rem; position: relative; overflow: hidden;
+}
+.skill-col::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.skill-col.web::before { background: linear-gradient(90deg, var(--accent-web), transparent); }
+.skill-col.mech::before { background: linear-gradient(90deg, var(--accent-mech), transparent); }
+.skill-col.ai::before { background: linear-gradient(90deg, var(--accent-ai), transparent); }
+
+.skill-col-icon { font-size: 2rem; margin-bottom: 1rem; }
+.skill-col-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 1.5rem; }
+.skill-bars { display: flex; flex-direction: column; gap: .9rem; }
+.skill-bar-item { display: flex; flex-direction: column; gap: .4rem; }
+.skill-bar-label { display: flex; justify-content: space-between; font-size: .7rem; font-family: var(--font-mono); color: var(--muted); }
+.skill-bar-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.skill-bar-fill { height: 100%; border-radius: 2px; transition: width 1.5s ease; width: 0; }
+.skill-col.web .skill-bar-fill { background: linear-gradient(90deg, var(--accent-web), rgba(0,229,255,.4)); }
+.skill-col.mech .skill-bar-fill { background: linear-gradient(90deg, var(--accent-mech), rgba(245,166,35,.4)); }
+.skill-col.ai .skill-bar-fill { background: linear-gradient(90deg, var(--accent-ai), rgba(180,111,255,.4)); }
+
+/* ─── EXPERIENCE TIMELINE ────────────────────────────────── */
+#experience { padding: 6rem 4rem; }
+.timeline { position: relative; margin-top: 3rem; }
+.timeline::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(var(--accent-web), var(--accent-ai), transparent);
+}
+.timeline-item {
+  padding: 0 0 3rem 2.5rem; position: relative;
+}
+.timeline-dot {
+  position: absolute; left: -5px; top: 4px; width: 11px; height: 11px;
+  border-radius: 50%; border: 2px solid var(--accent-web);
+  background: var(--bg); transition: box-shadow .3s;
+}
+.timeline-item:hover .timeline-dot { box-shadow: 0 0 12px var(--accent-web); }
+.timeline-date { font-family: var(--font-mono); font-size: .68rem; color: var(--muted); letter-spacing: .1em; margin-bottom: .4rem; }
+.timeline-role { font-size: 1.05rem; font-weight: 800; margin-bottom: .2rem; }
+.timeline-company { font-size: .8rem; color: var(--accent-web); font-family: var(--font-mono); margin-bottom: .7rem; }
+.timeline-desc { font-size: .8rem; color: var(--muted); line-height: 1.7; font-family: var(--font-mono); font-weight: 300; max-width: 560px; }
+
+/* ─── CONTACT ────────────────────────────────────────────── */
+#contact {
+  padding: 7rem 4rem;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+#contact::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,229,255,.04), transparent);
+  pointer-events: none;
+}
+.contact-big { font-size: clamp(2.5rem, 6vw, 6rem); font-weight: 800; line-height: 1.05; margin-bottom: 1.5rem; }
+.contact-big em { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--accent-web); }
+.contact-sub { color: var(--muted); font-family: var(--font-mono); font-size: .9rem; max-width: 440px; margin: 0 auto 3rem; line-height: 1.7; }
+
+.contact-links { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+.contact-btn {
+  display: flex; align-items: center; gap: .7rem;
+  background: var(--card); border: 1px solid var(--border);
+  padding: .9rem 1.8rem; border-radius: 6px; text-decoration: none;
+  color: var(--text); font-size: .8rem; font-weight: 700; letter-spacing: .08em;
+  transition: border-color .2s, color .2s, transform .2s;
+}
+.contact-btn:hover { transform: translateY(-3px); }
+.contact-btn.email:hover { border-color: var(--accent-web); color: var(--accent-web); }
+.contact-btn.linkedin:hover { border-color: #0a66c2; color: #0a66c2; }
+.contact-btn.github:hover { border-color: var(--accent-ai); color: var(--accent-ai); }
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem 4rem;
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--font-mono); font-size: .7rem; color: var(--muted);
+  flex-wrap: wrap; gap: 1rem;
+}
+
+/* ─── ANIMATIONS ─────────────────────────────────────────── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .projects-grid { grid-template-columns: 1fr 1fr; }
+  .project-card.featured { grid-column: span 2; }
+  .skills-cols { grid-template-columns: 1fr 1fr; }
+  .skills-cols .skill-col:last-child { grid-column: span 2; }
+}
+@media (max-width: 860px) {
+  nav { padding: 1.2rem 1.5rem; }
+  .nav-links, .nav-cta { display: none; }
+  .burger { display: flex; }
+  #hero { padding: 7rem 1.5rem 3rem; }
+  .hero-stats { display: none; }
+  #about { grid-template-columns: 1fr; gap: 2.5rem; padding: 4rem 1.5rem; }
+  .about-photo-wrap { display: flex; justify-content: center; }
+  .about-photo-frame { max-width: 280px; }
+  .core-section { padding: 4rem 1.5rem; }
+  .core-section::before { left: 1.5rem; right: 1.5rem; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .project-card.featured { grid-column: span 1; }
+  .skills-cols { grid-template-columns: 1fr; }
+  .skills-cols .skill-col:last-child { grid-column: span 1; }
+  #skills, #experience { padding: 4rem 1.5rem; }
+  #contact { padding: 4rem 1.5rem; }
+  footer { padding: 1.5rem; flex-direction: column; text-align: center; }
+}
+@media (max-width: 480px) {
+  .hero-name { font-size: clamp(2.5rem,14vw,4rem); }
+}
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">OE/</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#web">Web Dev</a></li>
+    <li><a href="#mechanical">Mechanical</a></li>
+    <li><a href="#ai">AI / ML</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Hire Me</a>
+  <button class="burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#web" onclick="closeMobile()">Web Dev</a>
+  <a href="#mechanical" onclick="closeMobile()">Mechanical</a>
+  <a href="#ai" onclick="closeMobile()">AI / ML</a>
+  <a href="#skills" onclick="closeMobile()">Skills</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div style="position:relative;z-index:2">
+    <p class="hero-tag">Available for exciting opportunities</p>
+    <h1 class="hero-name">
+      Orugbo<br>
+      <span class="line2">Edison</span>
+    </h1>
+    <div class="hero-roles">
+      <span class="role-pill pill-web">Full-Stack Web Engineer</span>
+      <span class="role-pill pill-mech">Mechanical Engineer</span>
+      <span class="role-pill pill-ai">AI / ML Engineer</span>
+    </div>
+    <p class="hero-desc">Building at the intersection of software, steel, and intelligence — from CAD designs to cloud-deployed AI systems and pixel-perfect web experiences.</p>
+    <div class="hero-ctas">
+      <a href="#web" class="btn-primary">Explore My Work</a>
+      <a href="#contact" class="btn-ghost">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num" style="color:var(--accent-web)">12+</div>
+      <div class="stat-label">Web Projects</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" style="color:var(--accent-mech)">8+</div>
+      <div class="stat-label">CAD Designs</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" style="color:var(--accent-ai)">6+</div>
+      <div class="stat-label">AI Models</div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-photo-wrap reveal">
+    <div style="position:relative; display:inline-block;">
+      <div class="photo-deco"></div>
+      <div class="photo-deco2"></div>
+      <div class="about-photo-frame">
+        <div class="photo-placeholder">
+          <div class="icon">👤</div>
+          <p>[ Replace with your photo ]</p>
+        </div>
+      </div>
+      <div class="photo-tag">
+        📍 Nigeria &nbsp;·&nbsp; Open to Remote
+      </div>
+    </div>
+  </div>
+  <div class="about-text reveal">
+    <p class="section-label">About Me</p>
+    <h2>Engineer who <em>thinks</em> in three dimensions</h2>
+    <p>I'm Orugbo Edison — a Mechanical Engineer turned Full-Stack Developer with a deep passion for AI and machine learning. I bring physical-world engineering intuition to software and data systems, creating solutions that are both rigorous and human-centred.</p>
+    <p>With expertise spanning SolidWorks & AutoCAD for mechanical design, modern web stacks like React and Node.js, and ML frameworks like TensorFlow and PyTorch, I bridge disciplines that rarely talk to each other.</p>
+    <p>Whether I'm designing a precision component, architecting a scalable SaaS backend, or training a computer vision model — I approach every problem with the same first-principles engineering mindset.</p>
+    <div class="skills-grid">
+      <span class="skill-tag">SolidWorks</span>
+      <span class="skill-tag">AutoCAD</span>
+      <span class="skill-tag">React</span>
+      <span class="skill-tag">Node.js</span>
+      <span class="skill-tag">Python</span>
+      <span class="skill-tag">TensorFlow</span>
+      <span class="skill-tag">PostgreSQL</span>
+      <span class="skill-tag">AWS</span>
+      <span class="skill-tag">Docker</span>
+      <span class="skill-tag">FEA/CFD</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CORE 1: WEB DEVELOPMENT ═══════════════════════════ -->
+<section id="web" class="core-section">
+  <div class="section-num">01</div>
+  <div class="section-header reveal">
+    <div>
+      <p class="core-label web-accent">Core Discipline 01</p>
+      <h2 class="core-title">Full-Stack <em>Web</em><br>Development</h2>
+    </div>
+    <p style="max-width:320px;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;line-height:1.7">From pixel-perfect frontends to resilient cloud backends — building products that scale and delight.</p>
+  </div>
+  <div class="projects-grid">
+
+    <!-- Featured -->
+    <div class="project-card web featured reveal">
+      <div class="project-visual mockup-ecommerce">
+        <div class="mockup-inner">
+          <div class="mini-browser" style="width:90%;height:90%">
+            <div class="mini-browser-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+            <div class="mini-browser-body">
+              <div class="mini-row accent-web"></div>
+              <div class="mini-row w70"></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px">
+                <div style="height:40px;background:rgba(0,229,255,.06);border-radius:4px;border:1px solid rgba(0,229,255,.12)"></div>
+                <div style="height:40px;background:rgba(0,229,255,.06);border-radius:4px;border:1px solid rgba(0,229,255,.12)"></div>
+                <div style="height:40px;background:rgba(0,229,255,.06);border-radius:4px;border:1px solid rgba(0,229,255,.12)"></div>
+                <div style="height:40px;background:rgba(0,229,255,.1);border-radius:4px;border:1px solid rgba(0,229,255,.25)"></div>
+              </div>
+              <div class="mini-row w80" style="margin-top:8px"></div>
+              <div class="mini-row w50"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags"><span class="ptag web">React</span><span class="ptag web">Node.js</span><span class="ptag web">MongoDB</span><span class="ptag web">Stripe</span></div>
+        <div class="project-title">ShopForge — E-Commerce Platform</div>
+        <div class="project-desc">A full-featured multi-vendor e-commerce platform with real-time inventory, Stripe payments, order tracking, and an admin dashboard. Handles 10k+ concurrent users with Redis caching.</div>
+      </div>
+      <div class="project-footer">
+        <a href="#" class="project-link web">View Project →</a>
+        <a href="#" class="project-link web" style="opacity:.5">GitHub ↗</a>
+      </div>
+    </div>
+
+    <div class="project-card web reveal">
+      <div class="project-visual mockup-saas">
+        <div class="mockup-inner">
+          <div class="mini-browser" style="width:88%;height:88%">
+            <div class="mini-browser-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+            <div class="mini-browser-body">
+              <div class="mini-row accent-web w80"></div>
+              <div class="mini-row w40"></div>
+              <div style="height:30px;background:rgba(0,229,255,.08);border-radius:4px;margin-top:6px;border:1px solid rgba(0,229,255,.15)"></div>
+              <div class="mini-row w70" style="margin-top:6px"></div>
+              <div class="mini-row w30"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags"><span class="ptag web">Next.js</span><span class="ptag web">Prisma</span><span class="ptag web">PostgreSQL</span></div>
+        <div class="project-title">TaskFlow SaaS</div>
+        <div class="project-desc">Project management SaaS with real-time collaboration, Kanban boards, and team analytics. Built with Next.js 14 App Router and WebSockets.</div>
+      </div>
+      <div class="project-footer">
+        <a href="#" class="project-link web">View Project →</a>
+      </div>
+    </div>
+
+    <div class="project-card web reveal">
+      <div class="project-visual mockup-dashboard">
+        <div class="mockup-inner">
+          <div style="width:85%;height:85%;background:rgba(0,229,255,.04);border-radius:6px;border:1px solid rgba(0,229,255,.12);padding:10px;display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;gap:6px">
+              <div style="flex:1;height:25px;background:rgba(0,229,255,.1);border-radius:4px"></div>
+              <div style="flex:1;height:25px;background:rgba(0,229,255,.06);border-radius:4px"></div>
+              <div style="flex:1;height:25px;background:rgba(0,229,255,.06);border-radius:4px"></div>
+            </div>
+            <div style="flex:1;background:rgba(0,229,255,.05);border-radius:4px;position:relative;overflow:hidden">
+              <svg viewBox="0 0 100 40" preserveAspectRatio="none" style="width:100%;height:100%;position:absolute;inset:0">
+                <polyline points="0,35 20,25 40,28 60,15 80,18 100,8" fill="none" stroke="rgba(0,229,255,0.5)" stroke-width="2"/>
+                <polyline points="0,35 20,25 40,28 60,15 80,18 100,8 100,40 0,40" fill="rgba(0,229,255,0.06)"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags"><span class="ptag web">React</span><span class="ptag web">D3.js</span><span class="ptag web">FastAPI</span></div>
+        <div class="project-title">Analytics Dashboard</div>
+        <div class="project-desc">Real-time data visualization platform with interactive D3 charts, live WebSocket feeds, and a Python FastAPI backend.</div>
+      </div>
+      <div class="project-footer">
+        <a href="#" class="project-link web">View Project →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CORE 2: MECHANICAL ENGINEERING ══════════════════════ -->
+<section id="mechanical" class="core-section">
+  <div class="section-num">02</div>
+  <div class="section-header reveal">
+    <div>
+      <p class="core-label mech-accent">Core Discipline 02</p>
+      <h2 class="core-title">Mechanical <em>Engineering</em><br>& CAD Design</h2>
+    </div>
+    <p style="max-width:320px;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;line-height:1.7">Precision design, structural analysis, and applied thermodynamics — turning constraints into elegant physical solutions.</p>
+  </div>
+  <div class="projects-grid">
+
+    <div class="project-card mech featured reveal">
+      <div class="project-visual mockup-cad">
+        <div class="mockup-inner">
+          <div class="cad-sketch">
+            <svg viewBox="0 0 300 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- isometric-ish bracket sketch -->
+              <rect x="30" y="40" width="240" height="100" rx="4" fill="rgba(245,166,35,.03)" stroke="rgba(245,166,35,.15)" stroke-width="1"/>
+              <!-- center part -->
+              <rect x="100" y="55" width="100" height="70" rx="3" fill="rgba(245,166,35,.06)" stroke="rgba(245,166,35,.4)" stroke-width="1.5"/>
+              <!-- holes -->
+              <circle cx="130" cy="90" r="10" fill="none" stroke="rgba(245,166,35,.5)" stroke-width="1.5"/>
+              <circle cx="170" cy="90" r="10" fill="none" stroke="rgba(245,166,35,.5)" stroke-width="1.5"/>
+              <!-- crosshairs -->
+              <line x1="130" y1="82" x2="130" y2="98" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+              <line x1="122" y1="90" x2="138" y2="90" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+              <line x1="170" y1="82" x2="170" y2="98" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+              <line x1="162" y1="90" x2="178" y2="90" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+              <!-- flanges -->
+              <rect x="50" y="70" width="50" height="20" rx="2" fill="rgba(245,166,35,.04)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+              <rect x="200" y="70" width="50" height="20" rx="2" fill="rgba(245,166,35,.04)" stroke="rgba(245,166,35,.3)" stroke-width="1"/>
+              <!-- dim lines -->
+              <line x1="100" y1="145" x2="200" y2="145" stroke="rgba(245,166,35,.2)" stroke-width="1" stroke-dasharray="3,3"/>
+              <line x1="100" y1="142" x2="100" y2="148" stroke="rgba(245,166,35,.4)" stroke-width="1"/>
+              <line x1="200" y1="142" x2="200" y2="148" stroke="rgba(245,166,35,.4)" stroke-width="1"/>
+              <text x="150" y="158" text-anchor="middle" fill="rgba(245,166,35,.5)" font-size="9" font-family="monospace">100.00 mm</text>
+              <!-- label -->
+              <text x="30" y="30" fill="rgba(245,166,35,.4)" font-size="8" font-family="monospace">ORUGBO_BRACKET_v3.SLDPRT</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags"><span class="ptag mech">SolidWorks</span><span class="ptag mech">FEA</span><span class="ptag mech">GD&T</span><span class="ptag mech">ANSYS</span></div>
+        <div class="project-title">Precision Mounting Bracket System</div>
+        <div class="project-desc">Full parametric CAD assembly for an industrial mounting system with FEA stress analysis. Achieved 40% weight reduction while maintaining structural integrity under 5kN load. Designed to ISO tolerancing standards.</div>
+      </div>
+      <div class="project-footer">
+        <a href="#" class="project-link mech">View Design →</a>
+        <a href="#" class="project-link mech" style="opacity:.5">PDF Report ↗</a>
+      </div>
+    </div>
+
+    <div class="project-card mech reveal">
+      <div class="project-visual mockup-drone">
+        <div class="mockup-inner">
+          <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:80%;height:80%">
+            <!-- drone body -->
+            <rect x="75" y="55" width="50" height="30" rx="6" fill="rgba(245,166,35,.07)" stroke="rgba(245,166,35,.4)" stroke-width="1.5"/>
+            <!-- arms -->
+            <line x1="75" y1="60" x2="35" y2="35" stroke="rgba(245,166,35,.35)" stroke-width="2"/>
+            <line x1="125" y1="60" x2="165" y2="35" stroke="rgba(245,166,35,.35)" stroke-width="2"/>
+            <line x1="75" y1="80" x2="35" y2="105" stroke="rgba(245,166,35,.35)" stroke-width="2"/>
+            <line x1="125" y1="80" x2="165" y2="105" stroke="rgba(245,166,35,.35)" stroke-width="2"/>
+            <!-- propellers -->
+            <ellipse cx="35" cy="35" rx="20" ry="5" fill="none" stroke="rgba(245,166,35,.5)" stroke-width="1"/>
+            <ellipse cx="165" cy="35" rx="20" ry="5" fill="none" stroke="rgba(245,166,35,.5)" stroke-width="1"/>
+            <ellipse cx="35" cy="105" rx="20" ry="5" fill="none" stroke="rgba(245,166,35,.5)" stroke-width="1"/>
+            <ellipse cx="165" cy="105" rx="20" ry="5" fill="none" stroke="rgba(245,166,35,.5)" stroke-width="1"/>
+            <!-- center dot -->
+            <circle cx="100" cy="70" r="6" fill="rgba(245,166,35,.2)" stroke="rgba(245,166,35,.6)" stroke-width="1"/>
+          </svg>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags"><span class="ptag mech">AutoCAD</span><span class="ptag mech">CFD</span><span class="ptag mech">3D Print</span></div>
+        <div class="project-title">UAV Frame Design</div>
+        <div class="project-desc">Lightweight quadrotor UAV frame designed for surveillance. CFD-optimised arm geometry reduces drag by 22%. Full assembly with BOM documentation.</div>
+      </div>
+      <div class="project-footer">
+        <a href="#" class="project-link mech">View Design →</a>
+      </div>
+    </div>
+
+    <div class="project-card mech reveal">
+      <div class="project-visual mockup-hvac">
+        <div class="mockup-inner">
+          <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:80%;height:80%">
+            <!-- heat exchanger plates -->
+            <rect x="30" y="30" width="140" height="80" rx="4" fill="rgba(245,166,35,.04)" stroke="rgba(245,166,35,.2)" stroke-width="1"/>
+            <line x1="30" y1="52" x2="170" y2="52" stroke="rgba(245,166,35,.15)" stroke-width="1"/>
+            <line x1="30" y1="70" x2="170" y2="70" stroke="rgba(245,166,35,.15)" stroke-width="1"/>
+            <line x1="30" y1="88" x2="170" y2="88" stroke="rgba(245,166,35,.15)" stroke-width="1"/>
+            <!-- flow arrows -->
+            <polyline points="50,40 70,40 70,60 90,60 90,40 110,40" fill="none" stroke="rgba(245,166,35,.5)" stroke-width="1.5" stroke-linecap="round"/>
+            <polyline points="120,100 140,100 140,80 120,80 120,100 100,100" fill="none" stroke="rgba(245,166,35,.3)" stroke-width="1.5" stroke-linecap="round"/>
+            <text x="100" y="128" text-anchor="middle" fill="rgba(245,166,35,.35)" font-size="8" font-family="monospace">HEAT_EXCHANGER_R22.dwg</text>
+          </svg>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags"><span class="ptag mech">AutoCAD</span><span class="ptag mech">Thermal</span><span class="ptag mech">HVAC</span></div>
+        <div class="project-title">HVAC Heat Exchanger Design</div>
+        <div class="project-desc">Plate-type heat exchanger for industrial HVAC application. Thermal analysis using ε-NTU method. 15% efficiency improvement over baseline design.</div>
+      </div>
+      <div class="project-footer">
+        <a href="#" class="project-link mech">View Design →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ CORE 3: AI / ML ══════════════════════════════════════ -->
+<section id="ai" class="core-section">
+  <div class="section-num">03</div>
+  <div class="section-header reveal">
+    <div>
+      <p class="core-label ai-accent">Core Discipline 03</p>
+      <h2 class="core-title">Artificial Intelligence<br>& <em>Machine Learning</em></h2>
+    </div>
+    <p style="max-width:320px;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;line-height:1.7">Building intelligent systems that perceive, reason, and act — from NLP pipelines to computer vision models in production.</p>
+  </div>
+  <div class="projects-grid">
+
+    <div class="project-card ai featured reveal">
+      <div class="project-visual mockup-nlp">
+        <div class="mockup-inner">
+          <div style="width:88%;height:88%;display:flex;flex-direction:column;gap:8px">
+            <div style="background:rgba(180,111,255,.05);border:1px solid rgba(180,111,255,.15);border-radius:6px;padding:10px;flex:1">
+              <div style="font-size:7px;font-family:monospace;color:rgba(180,111,255,.5);margin-bottom:6px">INPUT → TOKENIZE → EMBED → ATTEND → CLASSIFY</div>
+              <!-- token bars -->
+              <div style="display:flex;gap:3px;align-items:flex-end;height:40px">
+                <div style="flex:1;background:rgba(180,111,255,.35);border-radius:2px;height:60%"></div>
+                <div style="flex:1;background:rgba(180,111,255,.5);border-radius:2px;height:100%"></div>
+                <div style="flex:1;background:rgba(180,111,255,.3);border-radius:2px;height:45%"></div>
+                <div style="flex:1;background:rgba(180,111,255,.6);border-radius:2px;height:80%"></div>
+                <div style="flex:1;background:rgba(180,111,255,.25);border-radius:2px;height:35%"></div>
+                <div style="flex:1;background:rgba(180,111,255,.45);border-radius:2px;height:65%"></div>
+                <div style="flex:1;background:rgba(0,229,255,.4);border-radius:2px;height:90%"></div>
+                <div style="flex:1;background:rgba(180,111,255,.3);border-radius:2px;height:50%"></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:6px">
+              <div style="flex:2;background:rgba(180,111,255,.04);border:1px solid rgba(180,111,255,.12);border-radius:4px;padding:6px;font-size:6.5px;font-family:monospace;color:rgba(180,111,255,.4)">Accuracy: 94.2%</div>
+              <div style="flex:2;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.12);border-radius:4px;padding:6px;font-size:6.5px;font-family:monospace;color:rgba(0,229,255,.4)">F1: 0.941</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags"><span class="ptag ai">PyTorch</span><span class="ptag ai">Transformers</span><span class="ptag ai">HuggingFace</span><span class="ptag ai">FastAPI</span></div>
+        <div class="project-title">Sentiment & Intent NLP Engine</div>
+        <div class="project-desc">Fine-tuned BERT model for multi-class sentiment analysis and intent classification. Deployed as a REST API serving 5k+ requests/day. Achieved 94.2% accuracy on Nigerian-English code-switched text, outperforming baseline models by 11%.</div>
+      </div>
+      <div class="project-footer">
+        <a href="#" class="project-link ai">View Project →</a>
+        <a href="#" class="project-link ai" style="opacity:.5">arXiv ↗</a>
+      </div>
+    </div>
+
+    <div class="project-card ai reveal">
+      <div class="project-visual mockup-vision">
+        <div class="mockup-inner">
+          <div style="width:85%;height:85%;position:relative;background:rgba(180,111,255,.04);border:1px solid rgba(180,111,255,.12);border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+            <!-- detection boxes -->
+            <div style="position:absolute;top:15%;left:15%;width:35%;height:50%;border:1.5px solid rgba(0,229,255,.7);border-radius:2px">
+              <div style="position:absolute;top:-10px;left:0;font-size:7px;font-family:monospace;color:rgba(0,229,255,.8);background:rgba(0,0,0,.5);padding:1px 4px">gear [0.97]</div>
+            </div>
+            <div style="position:absolute;top:30%;right:10%;width:28%;height:35%;border:1.5px solid rgba(245,166,35,.7);border-radius:2px">
+              <div style="position:absolute;top:-10px;left:0;font-size:7px;font-family:monospace;color:rgba(245,166,35,.8);background:rgba(0,0,0,.5);padding:1px 4px">defect [0.89]</div>
+            </div>
+            <div style="width:60%;height:60%;background:rgba(180,111,255,.06);border-radius:4px;display:flex;align-items:center;justify-content:center">
+              <div style="font-size:2rem;opacity:.2">⚙</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags"><span class="ptag ai">YOLOv8</span><span class="ptag ai">OpenCV</span><span class="ptag ai">Python</span></div>
+        <div class="project-title">Industrial Defect Detection</div>
+        <div class="project-desc">Real-time computer vision system for detecting manufacturing defects on conveyor belts. 97% precision, 30fps inference on edge hardware. Integrates with my mechanical engineering domain knowledge.</div>
+      </div>
+      <div class="project-footer">
+        <a href="#" class="project-link ai">View Project →</a>
+      </div>
+    </div>
+
+    <div class="project-card ai reveal">
+      <div class="project-visual mockup-predict">
+        <div class="mockup-inner">
+          <div style="width:85%;height:85%;display:flex;flex-direction:column;gap:6px;padding:4px">
+            <div style="flex:1;background:rgba(180,111,255,.04);border-radius:4px;position:relative;overflow:hidden;border:1px solid rgba(180,111,255,.1)">
+              <svg viewBox="0 0 100 50" preserveAspectRatio="none" style="width:100%;height:100%;position:absolute;inset:0">
+                <!-- actual -->
+                <polyline points="0,40 15,35 30,38 45,28 60,32 75,22 90,26 100,18" fill="none" stroke="rgba(180,111,255,0.6)" stroke-width="1.5"/>
+                <!-- predicted -->
+                <polyline points="60,32 75,21 90,25 100,17" fill="none" stroke="rgba(0,229,255,0.7)" stroke-width="1.5" stroke-dasharray="3,2"/>
+              </svg>
+            </div>
+            <div style="display:flex;gap:6px">
+              <div style="flex:1;text-align:center;font-size:6.5px;font-family:monospace;color:rgba(180,111,255,.5)">— Actual</div>
+              <div style="flex:1;text-align:center;font-size:6.5px;font-family:monospace;color:rgba(0,229,255,.5)">-- Forecast</div>
+            </div>
+            <div style="background:rgba(180,111,255,.06);border:1px solid rgba(180,111,255,.1);border-radius:4px;padding:5px;font-size:7px;font-family:monospace;color:rgba(180,111,255,.5)">RMSE: 0.034 · MAE: 0.027</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags"><span class="ptag ai">LSTM</span><span class="ptag ai">TensorFlow</span><span class="ptag ai">Pandas</span></div>
+        <div class="project-title">Predictive Maintenance Model</div>
+        <div class="project-desc">Time-series LSTM model predicting mechanical component failure 48h in advance. Reduces unplanned downtime by 35% in pilot deployment on industrial pumps.</div>
+      </div>
+      <div class="project-footer">
+        <a href="#" class="project-link ai">View Project →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── SKILLS SECTION ────────────────────────────────────── -->
+<section id="skills">
+  <div class="section-header reveal" style="padding:0 4rem">
+    <div>
+      <p class="section-label" style="font-family:var(--font-mono);font-size:.7rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:.5rem">Proficiency</p>
+      <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:800">Technical <span style="font-family:var(--font-serif);font-style:italic;font-weight:400;color:var(--accent-ai)">Arsenal</span></h2>
+    </div>
+  </div>
+  <div class="skills-cols" style="padding:0 4rem">
+    <div class="skill-col web reveal">
+      <div class="skill-col-icon">🌐</div>
+      <div class="skill-col-title" style="color:var(--accent-web)">Web Development</div>
+      <div class="skill-bars">
+        <div class="skill-bar-item"><div class="skill-bar-label"><span>React / Next.js</span><span>95%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="95"></div></div></div>
+        <div class="skill-bar-item"><div class="skill-bar-label"><span>Node.js / Express</span><span>90%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div></div>
+        <div class="skill-bar-item"><div class="skill-bar-label"><span>PostgreSQL / MongoDB</span><span>85%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="85"></div></div></div>
+        <div class="skill-bar-item"><div class="skill-bar-label"><span>AWS / Docker</span><span>80%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="80"></div></div></div>
+        <div class="skill-bar-item"><div class="skill-bar-label"><span>TypeScript</span><span>88%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="88"></div></div></div>
+      </div>
+    </div>
+    <div class="skill-col mech reveal">
+      <div class="skill-col-icon">⚙️</div>
+      <div class="skill-col-title" style="color:var(--accent-mech)">Mechanical Engineering</div>
+      <div class="skill-bars">
+        <div class="skill-bar-item"><div class="skill-bar-label"><span>SolidWorks</span><span>92%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="92"></div></div></div>
+        <div class="skill-bar-item"><div class="skill-bar-label"><span>AutoCAD</span><span>90%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div></div>
+        <div class="skill-bar-item"><div class="skill-bar-label"><span>FEA (ANSYS)</span><span>80%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="80"></div></div></div>
+        <div class="skill-bar-item"><div class="skill-bar-label"><span>CFD Analysis</span><span>75%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="75"></div></div></div>
+        <div class="skill-bar-item"><div class="skill-bar-label"><span>GD&T / ISO</span><span>85%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="85"></div></div></div>
+      </div>
+    </div>
+    <div class="skill-col ai reveal">
+      <div class="skill-col-icon">🤖</div>
+      <div class="skill-col-title" style="color:var(--accent-ai)">AI / Machine Learning</div>
+      <div class="skill-bars">
+        <div class="skill-bar-item"><div class="skill-bar-label"><span>Python / PyTorch</span><span>90%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div></div>
+        <div class="skill-bar-item"><div class="skill-bar-label"><span>TensorFlow / Keras</span><span>85%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="85"></div></div></div>
+        <div class="skill-bar-item"><div class="skill-bar-label"><span>NLP / Transformers</span><span>82%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="82"></div></div></div>
+        <div class="skill-bar-item"><div class="skill-bar-label"><span>Computer Vision</span><span>80%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="80"></div></div></div>
+        <div class="skill-bar-item"><div class="skill-bar-label"><span>MLOps / Deployment</span><span>75%</span></div><div class="skill-bar-track"><div class="skill-bar-fill" data-width="75"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── EXPERIENCE ────────────────────────────────────────── -->
+<section id="experience">
+  <div class="section-header reveal" style="padding:0 0 0 0">
+    <div>
+      <p class="section-label" style="font-family:var(--font-mono);font-size:.7rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:.5rem">Career</p>
+      <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:800">Work <span style="font-family:var(--font-serif);font-style:italic;font-weight:400;color:var(--accent-web)">Experience</span></h2>
+    </div>
+  </div>
+  <div class="timeline reveal">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">2023 — Present</div>
+      <div class="timeline-role">Full-Stack Software Engineer</div>
+      <div class="timeline-company">Freelance / Remote</div>
+      <div class="timeline-desc">Designing and shipping full-stack web applications for clients across Nigeria, the UK, and the US. Stack: React, Next.js, Node.js, PostgreSQL, AWS. Built 12+ production apps with $0 downtime SLAs.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot" style="border-color:var(--accent-mech)"></div>
+      <div class="timeline-date">2021 — 2023</div>
+      <div class="timeline-role">Mechanical Design Engineer</div>
+      <div class="timeline-company">Engineering Firm · Nigeria</div>
+      <div class="timeline-desc">Led parametric CAD design for industrial equipment using SolidWorks and AutoCAD. Conducted FEA and thermal analysis using ANSYS. Delivered 8 certified manufacturing-ready designs within budget and schedule.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot" style="border-color:var(--accent-ai)"></div>
+      <div class="timeline-date">2022 — 2023</div>
+      <div class="timeline-role">AI/ML Research & Development</div>
+      <div class="timeline-company">Independent / Open Source</div>
+      <div class="timeline-desc">Developed and published NLP and computer vision models targeting African language datasets and industrial IoT use cases. Contributed to open-source ML tooling on GitHub.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot" style="border-color:var(--accent-mech)"></div>
+      <div class="timeline-date">2017 — 2021</div>
+      <div class="timeline-role">B.Eng. Mechanical Engineering</div>
+      <div class="timeline-company" style="color:var(--accent-mech)">University of Benin (UNIBEN) · Edo State, Nigeria</div>
+      <div class="timeline-desc">Graduated from the Department of Mechanical Engineering, Faculty of Engineering — University of Benin, Benin City, Edo State, Nigeria. Coursework covered thermodynamics, fluid mechanics, CAD/CAM, materials science, and engineering mathematics. Final year project: Autonomous solar-tracking system integrating embedded control systems and precision mechanical design.</div>
+      <div style="margin-top:.8rem;display:flex;gap:.5rem;flex-wrap:wrap">
+        <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:2px;background:rgba(245,166,35,.08);color:var(--accent-mech);border:1px solid rgba(245,166,35,.2)">UNIBEN</span>
+        <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:2px;background:rgba(245,166,35,.08);color:var(--accent-mech);border:1px solid rgba(245,166,35,.2)">Mechanical Engineering</span>
+        <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:2px;background:rgba(245,166,35,.08);color:var(--accent-mech);border:1px solid rgba(245,166,35,.2)">Edo State, Nigeria</span>
+        <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:2px;background:rgba(245,166,35,.08);color:var(--accent-mech);border:1px solid rgba(245,166,35,.2)">B.Eng.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ────────────────────────────────────────────── -->
+<section id="contact">
+  <p class="section-label reveal" style="font-family:var(--font-mono);font-size:.7rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:1rem">Get In Touch</p>
+  <h2 class="contact-big reveal">Let's build<br>something <em>great</em></h2>
+  <p class="contact-sub reveal">Whether you have a project in mind, a role to fill, or just want to connect — my inbox is open.</p>
+  <div class="contact-links reveal">
+    <a href="mailto:orugboedison@email.com" class="contact-btn email">
+      <span>📧</span> orugboedison@email.com
+    </a>
+    <a href="https://linkedin.com/in/orugboedison" target="_blank" class="contact-btn linkedin">
+      <span>💼</span> LinkedIn
+    </a>
+    <a href="https://github.com/orugboedison" target="_blank" class="contact-btn github">
+      <span>⌥</span> GitHub
+    </a>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─────────────────────────────────────────────── -->
+<footer>
+  <span>© 2025 Orugbo Edison. All rights reserved.</span>
+  <span style="display:flex;gap:1.5rem">
+    <a href="#hero" style="color:var(--muted);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--accent-web)'" onmouseout="this.style.color='var(--muted)'">↑ Back to top</a>
+    <span>Made with precision & passion</span>
+  </span>
+</footer>
+
+<!-- ─── SCRIPTS ────────────────────────────────────────────── -->
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e=>{
+  mx=e.clientX; my=e.clientY;
+  cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+});
+function animateRing(){
+  rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+document.querySelectorAll('a,button,.project-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    cursor.style.transform='translate(-50%,-50%) scale(2.2)';
+    ring.style.width='60px'; ring.style.height='60px';
+    ring.style.borderColor='rgba(0,229,255,.6)';
+  });
+  el.addEventListener('mouseleave',()=>{
+    cursor.style.transform='translate(-50%,-50%) scale(1)';
+    ring.style.width='36px'; ring.style.height='36px';
+    ring.style.borderColor='rgba(0,229,255,.4)';
+  });
+});
+
+// Mobile menu
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+burger.addEventListener('click',()=>mobileMenu.classList.toggle('open'));
+function closeMobile(){ mobileMenu.classList.remove('open'); }
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('visible'), i*80);
+    }
+  });
+},{threshold:.1});
+reveals.forEach(el=>revealObs.observe(el));
+
+// Skill bars
+const bars = document.querySelectorAll('.skill-bar-fill');
+const barObs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.style.width = e.target.dataset.width + '%';
+      barObs.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+bars.forEach(b=>barObs.observe(b));
+
+// Active nav link highlighting
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let current = '';
+  sections.forEach(s=>{
+    if(window.scrollY >= s.offsetTop - 200) current = s.id;
+  });
+  navLinks.forEach(a=>{
+    a.style.color = a.getAttribute('href')==='#'+current ? 'var(--accent-web)' : '';
+  });
+}, {passive:true});
+</script>
+</body>
+</html>
